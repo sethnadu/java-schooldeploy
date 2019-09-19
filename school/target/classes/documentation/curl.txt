@@ -1,0 +1,87 @@
+// Authorization get token
+curl -X POST --user "lambda-client:lambda-secret" -d "grant_type=password&username=admin&password=password" https://snadu-school.herokuapp.com/login
+
+{"access_token":"8743f8c1-07e6-4e78-99ce-67377bc4ff31","token_type":"bearer","expires_in":3599,"scope":"read write trust"}
+
+======================================================================================================
+
+//GET courses/courses/
+
+curl -X GET -H "Accept: application/json" -H "Authorization: Bearer 8743f8c1-07e6-4e78-99ce-67377bc4ff31" https://snadu-school.herokuapp.com/courses/courses/
+
+[{"courseid":1,"coursename":"Data Science","instructor":{"instructid":1,"instructname":"Sally"},"students":[{"studid":1,"studname":"John"},{"studid":3,"studname":"Mary"}]},{"courseid":4,"coursename":"Java Back End","instructor":{"instructid":2,"instructname":"Lucy"},"students":[{"studid":1,"studname":"John"}]},{"courseid":2,"coursename":"JavaScript","instructor":{"instructid":1,"instructname":"Sally"},"students":[{"studid":2,"studname":"Julian"}]}]
+
+
+**********
+
+
+//GET courses/studcount/
+
+curl -X GET -H "Accept: application/json" -H "Authorization: Bearer 8743f8c1-07e6-4e78-99ce-67377bc4ff31" https://snadu-school.herokuapp.com/courses/studcount/
+
+[{"coursename":"Node.js","courseId":3,"countstudents":1},{"coursename":"JavaScript","courseId":2,"countstudents":1},{"coursename":"Mobile Android","courseId":6,"countstudents":1},{"coursename":"Data Science","courseId":1,"countstudents":2},{"coursename":"Java Back End","courseId":4,"countstudents":1}]
+
+
+***********
+
+
+//DELETE  courses/courses/{courseid}
+
+curl -X DELETE -H "Authorization: Bearer 8743f8c1-07e6-4e78-99ce-67377bc4ff31" https://snadu-school.herokuapp.com/courses/courses/1
+
+
+=======================================================================================================
+
+//GET  students/students/
+
+curl -X GET -H "Accept: application/json" -H "Authorization: Bearer 8743f8c1-07e6-4e78-99ce-67377bc4ff31" https://snadu-school.herokuapp.com/students/students/
+
+[{"studid":1,"studname":"John","courses":[{"courseid":4,"coursename":"Java Back End","instructor":{"instructid":2,"instructname":"Lucy"}}]},{"studid":2,"studname":"Julian","courses":[{"courseid":2,"coursename":"JavaScript","instructor":{"instructid":1,"instructname":"Sally"}}]},{"studid":3,"studname":"Mary","courses":[{"courseid":3,"coursename":"Node.js","instructor":{"instructid":1,"instructname":"Sally"}},{"courseid":6,"coursename":"Mobile Android","instructor":{"instructid":3,"instructname":"Charlie"}}]},{"studid":4,"studname":"Julian","courses":[]},{"studid":5,"studname":"Tyler","courses":[]},{"studid":6,"studname":"Kim","courses":[]},{"studid":7,"studname":"Juan","courses":[]},{"studid":8,"studname":"Robby","courses":[]},{"studid":9,"studname":"Roberto","courses":[]},{"studid":10,"studname":"Bob","courses":[]},{"studid":11,"studname":"Liz","courses":[]},{"studid":12,"studname":"June","courses":[]},{"studid":13,"studname":"April","courses":[]}]
+
+
+************
+
+
+//GET  students/Student/{studid}
+
+curl -X GET -H "Accept: application/json" -H "Authorization: Bearer 8743f8c1-07e6-4e78-99ce-67377bc4ff31" https://snadu-school.herokuapp.com/students/Student/1
+
+{"studid":1,"studname":"John","courses":[{"courseid":4,"coursename":"Java Back End","instructor":{"instructid":2,"instructname":"Lucy"}}]}
+
+
+************
+
+
+//GET  students/student/namelike/{name}
+
+curl -X GET -H "Accept: application/json" -H "Authorization: Bearer 8743f8c1-07e6-4e78-99ce-67377bc4ff31" https://snadu-school.herokuapp.com/students/student/namelike/John
+
+[{"studid":1,"studname":"John","courses":[{"courseid":4,"coursename":"Java Back End","instructor":{"instructid":2,"instructname":"Lucy"}}]}]
+
+
+************
+
+
+//POST students/Student
+
+curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer 8743f8c1-07e6-4e78-99ce-67377bc4ff31" -d  "{ \"studname\":\"snoopy\"}" https://snadu-school.herokuapp.com/students/Student/
+
+
+************
+
+
+//PUT students/Student/{Studentid}
+
+curl -X PUT -H "Content-Type: application/json" -H "Authorization: Bearer 8743f8c1-07e6-4e78-99ce-67377bc4ff31" -d  "{ \"studname\":\"NOTsnoopy\"}" https://snadu-school.herokuapp.com/students/Student/2
+
+
+************
+
+
+//DELETE students/Student/{Studentid}
+
+curl -X DELETE -H "Authorization: Bearer 8743f8c1-07e6-4e78-99ce-67377bc4ff31" https://snadu-school.herokuapp.com/students/Student/1
+
+===========================================================================================================
+
+
