@@ -10,10 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 @RestController
@@ -32,9 +37,25 @@ public class CourseController
     @GetMapping(value = "/courses", produces = {"application/json"})
     public ResponseEntity<?> listAllCoursesWithPaging(@PageableDefault(page = 0, size = 3, sort = {"coursename"}, direction = Sort.Direction.ASC)Pageable pageable)
     {
-        ArrayList<Course> myCourses = courseService.findAll(pageable);
+        ArrayList<Course> myCourses = courseService.findAllPageable(pageable);
         return new ResponseEntity<>(myCourses, HttpStatus.OK);
     }
+
+    @ApiOperation(value = "Return all Courses", response = Course.class, responseContainer = "List")
+    @ApiImplicitParams({@ApiImplicitParam(name = "page", dataType = "integer", paramType = "query", value = "Results page you want to retrieve(0..N)"),
+                               @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query", value = "Results of records per page"),
+                               @ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query", value = "Sorting criteria in the format: property(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.")})
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "All Course's Found", response = Course.class),
+            @ApiResponse(code = 404, message = "Course's Not Found", response = ErrorDetail.class)})
+    @GetMapping(value = "/courses/test", produces = {"application/json"})
+    public ResponseEntity<?> listAllCourses()
+    {
+        ArrayList<Course> myCourses = courseService.findAll();
+        return new ResponseEntity<>(myCourses, HttpStatus.OK);
+    }
+
+
+
 
     @ApiOperation(value = "Return the Student Count", response = Course.class, responseContainer = "List")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Student Count Found", response = Course.class),
@@ -53,5 +74,28 @@ public class CourseController
     {
         courseService.delete(courseid);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Add Course", response = Course.class, responseContainer = "List")
+    @ApiResponses(value = {@ApiResponse(code = 201, message = "Course Added", response = void.class),
+            @ApiResponse(code = 500, message = "Course Not Added", response = ErrorDetail.class)})
+    @PostMapping(value = "/course/add",
+                 consumes = {"application/json"},
+                 produces = {"application/json"})
+    public ResponseEntity<?> addNewCourse(@Valid
+                                          @RequestBody
+                                                  Course newCourse) throws URISyntaxException
+    {
+        newCourse = courseService.save(newCourse);
+
+        // set the location header for the newly created resource
+        HttpHeaders responseHeaders = new HttpHeaders();
+        URI newStudentURI = ServletUriComponentsBuilder.fromCurrentRequest()
+                                                       .path("/{courseid}")
+                                                       .buildAndExpand(newCourse.getCourseid())
+                                                       .toUri();
+        responseHeaders.setLocation(newStudentURI);
+
+        return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
     }
 }

@@ -1,1 +1,6 @@
+com/lambdaschool/school/SchoolApplication.class
+com/lambdaschool/school/service/CourseServiceImplTest.class
+com/lambdaschool/school/controllers/CourseControllerUnitTest.class
 com/lambdaschool/school/SchoolApplicationTests.class
+com/lambdaschool/school/SeedData.class
+com/lambdaschool/school/controllers/CourseControllerIntegrateTest.class

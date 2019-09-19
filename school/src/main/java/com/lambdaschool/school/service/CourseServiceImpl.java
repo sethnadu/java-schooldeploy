@@ -18,10 +18,18 @@ public class CourseServiceImpl implements CourseService
     private CourseRepository courserepos;
 
     @Override
-    public ArrayList<Course> findAll(Pageable pageable)
+    public ArrayList<Course> findAllPageable(Pageable pageable)
     {
         ArrayList<Course> list = new ArrayList<>();
         courserepos.findAll(pageable).iterator().forEachRemaining(list::add);
+        return list;
+    }
+
+    @Override
+    public ArrayList<Course> findAll()
+    {
+        ArrayList<Course> list = new ArrayList<>();
+        courserepos.findAll().iterator().forEachRemaining(list::add);
         return list;
     }
 
@@ -43,5 +51,24 @@ public class CourseServiceImpl implements CourseService
         {
             throw new EntityNotFoundException(Long.toString(id));
         }
+    }
+
+    @Override
+    public Course findCourseById(long id) throws EntityNotFoundException
+    {
+        return courserepos.findById(id)
+                          .orElseThrow(() -> new EntityNotFoundException(Long.toString(id)));
+    }
+
+    @Transactional
+    @Override
+    public Course save(Course course)
+    {
+        Course newCourse = new Course();
+
+        newCourse.setCoursename(course.getCoursename());
+        newCourse.setInstructor(course.getInstructor());
+
+        return courserepos.save(newCourse);
     }
 }

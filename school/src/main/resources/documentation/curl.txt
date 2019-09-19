@@ -14,6 +14,15 @@ curl -X GET -H "Accept: application/json" -H "Authorization: Bearer 8743f8c1-07e
 
 **********
 
+//GET courses/courses/test
+
+curl -X GET -H "Accept: application/json" -H "Authorization: Bearer d633f95c-786a-4110-ba9f-992f2c657237" https://snadu-school.herokuapp.com/courses/courses/test
+
+[{"courseid":1,"coursename":"Data Science","instructor":{"instructid":1,"instructname":"Sally"},"students":[{"studid":1,"studname":"John"},{"studid":3,"studname":"Mary"}]},{"courseid":2,"coursename":"JavaScript","instructor":{"instructid":1,"instructname":"Sally"},"students":[{"studid":2,"studname":"Julian"}]},{"courseid":3,"coursename":"Node.js","instructor":{"instructid":1,"instructname":"Sally"},"students":[{"studid":3,"studname":"Mary"}]},{"courseid":4,"coursename":"Java Back End","instructor":{"instructid":2,"instructname":"Lucy"},"students":[{"studid":1,"studname":"John"}]},{"courseid":5,"coursename":"Mobile IOS","instructor":{"instructid":2,"instructname":"Lucy"},"students":[]},{"courseid":6,"coursename":"Mobile Android","instructor":{"instructid":3,"instructname":"Charlie"},"students":[{"studid":3,"studname":"Mary"}]},{"courseid":28,"coursename":"CURL","instructor":null,"students":[]}]
+
+
+**********
+
 
 //GET courses/studcount/
 
@@ -28,6 +37,12 @@ curl -X GET -H "Accept: application/json" -H "Authorization: Bearer 8743f8c1-07e
 //DELETE  courses/courses/{courseid}
 
 curl -X DELETE -H "Authorization: Bearer 8743f8c1-07e6-4e78-99ce-67377bc4ff31" https://snadu-school.herokuapp.com/courses/courses/1
+
+
+***********
+
+//POST courses/course/add
+curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer d633f95c-786a-4110-ba9f-992f2c657237" -d  "{ \"coursename\":\"CURL\"}" https://snadu-school.herokuapp.com/courses/course/add
 
 
 =======================================================================================================
