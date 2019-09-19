@@ -1,8 +1,11 @@
 package com.lambdaschool.school.service;
 
+import com.lambdaschool.school.model.Course;
 import com.lambdaschool.school.model.Student;
 import com.lambdaschool.school.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,12 +20,10 @@ public class StudentServiceImpl implements StudentService
     private StudentRepository studrepos;
 
     @Override
-    public List<Student> findAll()
+    public List<Student> findAll(Pageable pageable)
     {
         List<Student> list = new ArrayList<>();
-        studrepos.findAll()
-                 .iterator()
-                 .forEachRemaining(list::add);
+        studrepos.findAll().iterator().forEachRemaining(list::add);
         return list;
     }
 
@@ -30,24 +31,21 @@ public class StudentServiceImpl implements StudentService
     public Student findStudentById(long id) throws EntityNotFoundException
     {
         return studrepos.findById(id)
-                        .orElseThrow(() -> new EntityNotFoundException(Long.toString(id)));
+                .orElseThrow(() -> new EntityNotFoundException(Long.toString(id)));
     }
 
     @Override
     public List<Student> findStudentByNameLike(String name)
     {
         List<Student> list = new ArrayList<>();
-        studrepos.findByStudnameContainingIgnoreCase(name)
-                 .iterator()
-                 .forEachRemaining(list::add);
+        studrepos.findByStudnameContainingIgnoreCase(name).iterator().forEachRemaining(list::add);
         return list;
     }
 
     @Override
     public void delete(long id) throws EntityNotFoundException
     {
-        if (studrepos.findById(id)
-                     .isPresent())
+        if (studrepos.findById(id).isPresent())
         {
             studrepos.deleteById(id);
         } else
@@ -71,7 +69,7 @@ public class StudentServiceImpl implements StudentService
     public Student update(Student student, long id)
     {
         Student currentStudent = studrepos.findById(id)
-                                          .orElseThrow(() -> new EntityNotFoundException(Long.toString(id)));
+                .orElseThrow(() -> new EntityNotFoundException(Long.toString(id)));
 
         if (student.getStudname() != null)
         {
